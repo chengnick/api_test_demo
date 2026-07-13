@@ -35,3 +35,37 @@ jobs:
         with:
           name: allure-results-py${{ matrix.python-version }}
           path: allure-results
+
+  analyze:
+      needs: test
+      if: always()
+      runs-on: ubuntu-latest
+      steps:
+        - name: Checkout analyzer
+          uses: actions/checkout@v4
+          with:
+            repository: chengnick/allure-ai-analyzer
+            path: analyzer
+
+        - uses: actions/setup-python@v5
+          with:
+            python-version: '3.11'
+
+        - name: Download allure results
+          uses: actions/download-artifact@v4
+          with:
+            name: allure-results-py3.11
+            path: allure-results
+
+        - name: Run analyzer
+          env:
+            GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          run: |
+            pip install -r analyzer/requirements.txt
+            python analyzer/main.py allure-results -o analysis-report.md
+
+        - name: Upload analysis
+          uses: actions/upload-artifact@v4
+          with:
+            name: failure-analysis
+            path: analysis-report.md
