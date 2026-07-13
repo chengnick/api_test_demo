@@ -1,0 +1,6 @@
+# 相容範圍鎖定（~= 允許小版更新、鎖大版）
+requests~=2.31
+pyyaml~=6.0
+pytest~=8.0
+# 內建 mock 平台用標準庫，無需額外套件
+# 選用：allure-pytest~=2.13（Allure 報告）

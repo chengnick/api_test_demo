@@ -1,0 +1,54 @@
+[
+  {
+    "name": "profile",
+    "method": "GET",
+    "path": "/api/admin/profile",
+    "params": [],
+    "readonly": true
+  },
+  {
+    "name": "accounts",
+    "method": "POST",
+    "path": "/api/admin/accounts",
+    "params": [
+      "page",
+      "size"
+    ],
+    "readonly": true,
+    "expect": {
+      "fields": [
+        "data"
+      ]
+    }
+  },
+  {
+    "name": "summary",
+    "method": "POST",
+    "path": "/api/admin/report/summary",
+    "params": [
+      "startDate",
+      "endDate"
+    ],
+    "readonly": true,
+    "param_values": {
+      "startDate": "2024-01-01",
+      "endDate": "2024-01-31"
+    },
+    "expect": {
+      "fields": [
+        "status",
+        "data"
+      ]
+    }
+  },
+  {
+    "name": "transactions",
+    "method": "POST",
+    "path": "/api/admin/transactions",
+    "params": [
+      "page",
+      "size"
+    ],
+    "readonly": true
+  }
+]

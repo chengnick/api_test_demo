@@ -1,0 +1,39 @@
+[
+  {
+    "name": "balance",
+    "method": "POST",
+    "path": "/api/user/balance",
+    "params": [],
+    "readonly": true,
+    "expect": {
+      "fields": [
+        "status",
+        "data"
+      ]
+    }
+  },
+  {
+    "name": "bankingHistory",
+    "method": "POST",
+    "path": "/api/user/banking/history",
+    "params": [
+      "startTime",
+      "endTime"
+    ],
+    "readonly": true
+  },
+  {
+    "name": "inbox",
+    "method": "GET",
+    "path": "/api/user/inbox",
+    "params": [],
+    "readonly": true
+  },
+  {
+    "name": "promotions",
+    "method": "POST",
+    "path": "/api/user/promotions",
+    "params": [],
+    "readonly": true
+  }
+]

@@ -1,0 +1,20 @@
+# ===================================================================
+# DEMO Tenant 清單 —— 新增一個 tenant 只要在這裡加一筆。
+#
+# demo 版所有 tenant 都指向內建的本機 mock 平台（用 /{tenant} 路徑區分），
+# 展示「同一份 API 模板，套用到 N 個租戶」。真實版則會依 tenant 推導網域。
+# ===================================================================
+
+mock_base: "http://127.0.0.1:8799"   # demo 專用：本機 mock 平台
+
+tenants:
+  alpha:
+    enabled: true
+  bravo:
+    enabled: true
+  charlie:
+    enabled: true
+
+  # 新增 tenant 範例：加一行就好，測試自動套用
+  # delta:
+  #   enabled: true
