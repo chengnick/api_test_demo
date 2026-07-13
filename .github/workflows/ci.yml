@@ -69,3 +69,33 @@ jobs:
           with:
             name: failure-analysis
             path: analysis-report.md
+            
+  analyze-offline:
+      needs: test
+      if: always()
+      runs-on: ubuntu-latest
+      steps:
+        - name: Checkout analyzer
+          uses: actions/checkout@v4
+          with:
+            repository: chengnick/allure-ai-analyzer
+            path: analyzer
+        - uses: actions/setup-python@v5
+          with:
+            python-version: '3.11'
+        - name: Download allure results
+          uses: actions/download-artifact@v4
+          with:
+            name: allure-results-py3.11
+            path: allure-results
+        - name: Block Gemini endpoint (offline proof)
+          run: echo "127.0.0.1 generativelanguage.googleapis.com" | sudo tee -a /etc/hosts
+        - name: Run analyzer offline (no key, no AI)
+          run: |
+            pip install -r analyzer/requirements.txt
+            python analyzer/main.py allure-results --no-ai -o analysis-offline.md
+        - name: Upload offline analysis
+          uses: actions/upload-artifact@v4
+          with:
+            name: failure-analysis-offline
+            path: analysis-offline.md
