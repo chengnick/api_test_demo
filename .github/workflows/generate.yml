@@ -1,0 +1,67 @@
+name: Generate Tests
+
+on:
+  push:
+    branches: [ main ]
+    paths:
+      - 'templates/*.json'
+  pull_request:
+    paths:
+      - 'templates/*.json'
+  workflow_dispatch:
+
+jobs:
+  generate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout demo repo
+        uses: actions/checkout@v4
+
+      - name: Checkout generator
+        uses: actions/checkout@v4
+        with:
+          repository: chengnick/api-test-generator
+          path: generator-repo
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install generator dependencies
+        run: pip install -r generator-repo/requirements.txt
+
+      # demo template 格式 {name,method,path,params,readonly,expect}
+      # → generator 格式 {name,method,path,auth};demo 的 API 皆為登入後,auth 一律 true
+      - name: Transform spec (demo templates -> generator format)
+        run: |
+          python - <<'EOF'
+          import json, pathlib
+          entries = []
+          for f in ("templates/admin_apis.json", "templates/user_apis.json"):
+              for e in json.loads(pathlib.Path(f).read_text(encoding="utf-8")):
+                  entries.append({"name": e["name"], "method": e["method"],
+                                  "path": e["path"], "auth": True})
+          out = pathlib.Path("generator-repo/examples/httpbin_endpoints.json")
+          out.write_text(json.dumps(entries, indent=2), encoding="utf-8")
+          print(f"transformed {len(entries)} endpoints -> {out}")
+          EOF
+
+      - name: Run generator
+        env:
+          TEST_OUTPUT_DIR: ${{ github.workspace }}/generated-out
+        run: |
+          cd generator-repo
+          python generator/main.py
+
+      - name: Show generated files
+        run: |
+          echo "=== generated files ===" >> $GITHUB_STEP_SUMMARY
+          ls -la generated-out/ | tee -a $GITHUB_STEP_SUMMARY
+          echo "=== line counts ===" 
+          wc -l generated-out/*
+
+      - name: Upload generated tests
+        uses: actions/upload-artifact@v4
+        with:
+          name: generated-tests
+          path: generated-out/
