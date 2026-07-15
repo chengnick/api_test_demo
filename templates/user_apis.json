@@ -35,6 +35,14 @@
     "path": "/api/user/promotions",
     "params": [],
     "readonly": true
+  },
+  {
+  "name": "get_notification_list",
+  "method": "GET",
+  "path": "/api/user/notifications",
+  "params": {},
+  "readonly": true,
+  "expect": 200
   }
 ]
 
