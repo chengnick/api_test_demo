@@ -37,12 +37,15 @@
     "readonly": true
   },
   {
-  "name": "get_notification_list",
-  "method": "GET",
-  "path": "/api/user/notifications",
-  "params": {},
-  "readonly": true,
-  "expect": 200
+    "name": "get_notification_list",
+    "method": "GET",
+    "path": "/api/user/notifications",
+    "params": [],
+    "readonly": true,
+    "expect": {
+      "fields": [
+        "status",
+        "data"
   }
 ]
 
