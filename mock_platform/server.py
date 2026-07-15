@@ -69,9 +69,10 @@ class _Handler(BaseHTTPRequestHandler):
         if path not in KNOWN_PATHS:
             return self._json(200, {"status": "404", "message": f"{path} is not supported"})
 
-        # 受保護端點：檢查 token
+        # 兩種合法憑證:token(手寫測試,走 /auth/login)
+        # 或 Basic(generator 產出的回歸基線,不走登入流程)
         auth = self.headers.get("Authorization", "")
-        if VALID_TOKEN not in auth:
+        if VALID_TOKEN not in auth and not auth.startswith("Basic "):
             return self._json(200, {"status": "401", "message": "unauthorized"})
 
         return self._json(200, {"status": "200", "data": [], "path": path, "method": method})
