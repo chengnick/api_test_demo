@@ -27,6 +27,8 @@ jobs:
           pip install -r requirements.txt allure-pytest
 
       - name: Run tests (self-contained, uses built-in mock platform)
+        env: 
+          HTTPBIN_BASE_URL: http://127.0.0.1:8799/alpha
         run: pytest -v --alluredir=allure-results
 
       - name: Upload Allure results
