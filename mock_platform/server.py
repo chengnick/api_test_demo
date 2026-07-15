@@ -27,6 +27,7 @@ KNOWN_PATHS = {
     "/api/user/banking/history",
     "/api/user/inbox",
     "/api/user/promotions",
+    "/api/user/notifications",
 }
 
 
